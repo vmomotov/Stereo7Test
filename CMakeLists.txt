@@ -28,6 +28,7 @@ cmake_minimum_required(VERSION 3.6)
 set(APP_NAME Stereo7Test)
 
 project(${APP_NAME})
+include(${CMAKE_CURRENT_SOURCE_DIR}/spine-runtimes/spine-cocos2dx/spine-cocos2dx.cmake)
 
 set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
@@ -47,14 +48,9 @@ if(APPLE OR WINDOWS)
 endif()
 
 # add cross-platforms source files and header files 
-list(APPEND GAME_SOURCE
-     Classes/AppDelegate.cpp
-     Classes/MainScene.cpp
-     )
-list(APPEND GAME_HEADER
-     Classes/AppDelegate.h
-     Classes/MainScene.h
-     )
+file(GLOB_RECURSE GAME_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/Classes/*.cpp")
+file(GLOB_RECURSE GAME_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/Classes/*.h")
+set(GAME_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/Classes")
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
@@ -121,6 +117,7 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
+target_link_libraries(${APP_NAME} spine-cpp spine-cocos2dx)
 target_link_libraries(${APP_NAME} cocos2d)
 target_include_directories(${APP_NAME}
         PRIVATE Classes

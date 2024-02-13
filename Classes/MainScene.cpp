@@ -1,5 +1,7 @@
 #include "MainScene.h"
 #include "ui/UIButton.h"
+#include <spine/spine-cocos2dx.h>
+#include <spine/Extension.h>
 
 USING_NS_CC;
 
@@ -18,6 +20,13 @@ bool MainScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Vec2 center = Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
+
+    // configuring and adding animated character
+    spine::SkeletonAnimation* pSkeletonNode = spine::SkeletonAnimation::createWithJsonFile("hero_2.json", "hero_2.atlas", 3.f);
+    pSkeletonNode->setAnimation(0, "idle", true);
+    pSkeletonNode->setPosition(center);
+    this->addChild(pSkeletonNode);
+    scheduleUpdate();
 
     // configuring and adding stop-button
     auto pStopBtn = ui::Button::create("button.png");
